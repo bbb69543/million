@@ -12,7 +12,7 @@ function SideBarArea(props) {
   return (
     <Box
       sx={{
-        width: "15%",
+        width: "15vw",
         padding: 3,
       }}
       className="animated-background"

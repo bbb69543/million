@@ -12,6 +12,7 @@ function ContentArea(props) {
         elevation={3}
         sx={{
           mx:1,
+          p:1,
           minHeight: "95vh",
           // display: "flex",
           alignItems: "center",

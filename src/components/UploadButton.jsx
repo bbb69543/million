@@ -5,7 +5,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 function UploadButton(props) {
   return (
-    <Box sx={{ marginBottom: 2 }}>
+    <Box sx={{ marginBottom: 1 }}>
       <Typography variant="body1" gutterBottom>
         {props.label}
       </Typography>
