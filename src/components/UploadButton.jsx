@@ -22,7 +22,7 @@ function UploadButton(props) {
           onChange={(e) => {
             props.handleUpload(e, props.index);
           }}
-          accept=".xls,.xlsx,.ods"
+          accept=".xls,.xlsx,.ods,.xlt"
           // multiple
         />
         {props.files[props.index] ? props.files[props.index].name : "選擇檔案"}
