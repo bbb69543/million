@@ -31,6 +31,7 @@ function TeachText() {
             <img src="images/result4.png" alt="Single and group condition"></img>
           </div>
         </li>
+        <li>有任何問題請聯繫: 姚禹安 a08656@taisugar.com.tw</li>
       </ul>
       <h2>文件下載位置:</h2>
       <ol>
