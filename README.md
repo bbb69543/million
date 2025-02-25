@@ -1,0 +1,1 @@
+The website only for Million convenience store to verify accounting records.
