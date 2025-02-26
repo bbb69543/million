@@ -6,7 +6,7 @@ function SideBarArea(props) {
   // the files we need
   const fileList = [
     "POS系統庫存 (.xls)",
-    "進銷存系統庫存 (.xlsx/.ods)",
+    "進銷存系統庫存 (.xlt/.ods)",
     "店鋪商品數量轉換維護檔 (.xls)",
   ];
   return (

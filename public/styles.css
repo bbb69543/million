@@ -24,11 +24,11 @@ h1 {
 
 body {
   margin: 0;
+  font-family: Noto Sans TC, serif;
 }
 
 p {
   font-family: Noto Sans TC, serif;
-  font-weight: 300;
 }
 
 button {
@@ -64,3 +64,41 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+/* 讓 div 可以滾動 */
+.scroll-container {
+  position: relative; /* 讓按鈕的 absolute 定位生效 */
+  height: 95vh;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* 回到頂部按鈕 */
+.scroll-to-top-btn {
+  position: sticky;
+  bottom: 10px;
+  left: 90vw;
+  padding: 10px 15px;
+  background-color: #CCEEFF;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* 當按鈕顯示時 */
+.scroll-to-top-btn.show {
+  opacity: 1;
+}
+
+/* 當按鈕隱藏時 */
+.scroll-to-top-btn.hide {
+  opacity: 0;
+  pointer-events: none; /* 防止點擊隱藏的按鈕 */
+}
+
+.scroll-to-top-btn:hover {
+  background-color: #1565C0;
+}
+
