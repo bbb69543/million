@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Container } from "@mui/material";
-import SideBarArea from "./SideBarArea";
-import ContentArea from "./ContentArea";
-import posTidy from "./posTidy";
-import taiTidy from "./taiTidy";
-import ruleTidy from "./ruleTidy";
-import analyze from "./analyze";
+import SideBarArea from "./components/SideBarArea";
+import ContentArea from "./components/ContentArea";
+import posTidy from "./components/posTidy";
+import taiTidy from "./components/taiTidy";
+import ruleTidy from "./components/ruleTidy";
+import analyze from "./components/analyze";
+import './App.css'
 
 function App() {
   const [content, setContent] = useState(null);
