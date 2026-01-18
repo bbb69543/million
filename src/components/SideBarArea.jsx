@@ -12,13 +12,19 @@ function SideBarArea(props) {
   return (
     <Box
       sx={{
-        width: "15vw",
-        padding: 3,
+        width: "18vw",
+        padding: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        justifyContent: 'flex-start',
+        alignItems: 'center', // Center content horizontally
+        flexShrink: 0,
       }}
       className="animated-background"
     >
-      <h1>蜜鄰對帳小工具</h1>
-      <Box sx={{ width: "80%", marginBottom: 3, mx: "auto" }}>
+      <h1 style={{ margin: '10px 0' }}>蜜鄰對帳小工具</h1>
+      <Box sx={{ width: "80%", marginBottom: 1, mx: "auto" }}>
         <img
           src="/images/homeImg.jpg"
           alt="Sidebar Illustration"
@@ -40,10 +46,27 @@ function SideBarArea(props) {
         variant="contained"
         color="primary"
         // fullWidth={true}
-        sx={{ mt: 2, borderRadius: 1, width: 1, height: 30 }}
+        sx={{ mt: 1, borderRadius: 1, width: 1, height: 30 }}
         onClick={props.handleCheck}
       >
         開始核對
+      </Fab>
+      <Fab
+        variant="extended"
+        sx={{
+          mt: 'auto', // Push to bottom
+          borderRadius: 1,
+          width: 1,
+          height: 48,
+          bgcolor: '#607d8b',
+          color: 'white',
+          '&:hover': {
+            bgcolor: '#455a64'
+          }
+        }}
+        onClick={() => props.navigate('/')}
+      >
+        回首頁
       </Fab>
     </Box>
   );

@@ -1,5 +1,5 @@
 import React from "react";
-import { Fab } from "@mui/material";
+import { Fab, Box } from "@mui/material";
 import * as XLSX from "xlsx";
 
 function TableDataBtn(props) {
@@ -36,9 +36,9 @@ function TableDataBtn(props) {
     };
 
     return (
-        <div style={{ textAlign: "right" }}>
+        <Box sx={{ textAlign: "right", mb: 3 }}>
             <Fab variant="contained" color="primary" sx={{ px: 2, my: 1, borderRadius: 1, width: "fit-content", height: 1 }} onClick={handleExport}>下載 Excel</Fab>
-        </div >
+        </Box >
     );
 }
 

@@ -9,18 +9,28 @@ function ContentArea(props) {
     <Box sx={{ flexGrow: 1 }}>
 
       <Paper
-        elevation={3}
+        elevation={props.elevation !== undefined ? props.elevation : 3}
         sx={{
-          mx:1,
-          p:1,
-          minHeight: "95vh",
-          // display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          mx: 1,
+          p: 1,
+          height: "calc(100vh - 20px)", // Slightly less than 100vh to ensure bottom margin
+          display: "flex",
+          flexDirection: "column",
+          // alignItems: "center", // Remove centering to allow full width/height
+          // justifyContent: "center",
+          overflow: "hidden" // Let child handle scroll
         }}
       >
-        {props.content ? <TableDataBtn content={props.content} /> : null}
-        {props.content ? <TableData content={props.content} /> : <TeachText />}
+        {props.content ? (
+          props.ExportButton ?
+            <props.ExportButton content={props.content} /> :
+            <TableDataBtn content={props.content} />
+        ) : null}
+        {props.content ? (
+          props.TableComponent ?
+            <props.TableComponent content={props.content} /> :
+            <TableData content={props.content} />
+        ) : (props.intro || <TeachText />)}
       </Paper>
     </Box>
   );
