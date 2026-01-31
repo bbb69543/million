@@ -74,7 +74,10 @@ function TaxConversionPage() {
                             </li>
                             <li><b>填寫報稅資料</b>
                                 <ul>
-                                    <li>(1)選擇自己的<b>店名</b>(單位)。表單自動帶入稅籍資料及統編。
+                                    <li><b>(1)選擇自己的店名(單位)</b>。<br></br>
+                                        <div style={{ marginTop: '5px' }}>
+                                            表單自動帶入稅籍資料及統編。
+                                        </div>
                                         <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                                             <div className="imgContainer" style={{ width: 'auto', margin: 0 }}>
                                                 <img src="images/tax_step_1.png" alt="Select shop name" style={{ height: '150px', width: 'auto' }}></img>
@@ -95,27 +98,79 @@ function TaxConversionPage() {
                                             </div>
                                         </div>
                                     </li>
-                                    <li>(2)依序新增進項發票資料<br></br><b>不可跳行輸入</b>。若「營業稅額」不為「銷售金額」的5%(四捨五入)，稅額會出現紅底提示。
+                                    <li><b>(2)依序新增進項發票資料</b>
+                                        <div style={{ marginTop: '5px' }}>
+                                            <b>不可跳行輸入</b>。若「營業稅額」不為「銷售金額」的5%(四捨五入)，稅額會出現紅底提示。
+                                        </div>
                                         <div className="imgContainer" style={{ width: 'auto', margin: 0, marginTop: '10px' }}>
                                             <img src="images/tax_step_2_item_2.png" alt="Tax calculation warning" style={{ maxWidth: '100%', height: 'auto' }}></img>
+                                        </div>
+                                    </li>
+                                    <li><b>(3)右側灰底欄位可協助核對稅額及統編</b>
+                                        <div style={{ marginTop: '5px' }}>
+                                            「未稅核對」欄位的數值為「銷售金額」*0.05，「廠商」欄位會依據「銷售人統編」欄位，至「統編資料」分頁抓取廠商名稱。
+                                        </div>
+                                        <div className="imgContainer" style={{ width: 'auto', margin: 0, marginTop: '10px' }}>
+                                            <img src="images/tax_step_3_check.png" alt="Tax verification check" style={{ maxWidth: '100%', height: 'auto' }}></img>
+                                        </div>
+                                    </li>
+                                    <li><b>(4)若無廠商資料，可至「統編資料」分頁新增。</b>
+                                        <div style={{ marginTop: '5px' }}>
+                                            請至分頁「統編資料」新增廠商資料。第1欄為統一編號，第2欄為廠商名稱。
+                                        </div>
+                                        <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                                            <div className="imgContainer" style={{ width: 'auto', margin: 0 }}>
+                                                <img src="images/tax_step_4_1.png" alt="Tax step 4 - 1" style={{ height: '150px', width: 'auto' }}></img>
+                                            </div>
+                                            <div className="imgContainer" style={{ width: 'auto', margin: 0 }}>
+                                                <img src="images/tax_step_4_2.png" alt="Tax step 4 - 2" style={{ height: '150px', width: 'auto' }}></img>
+                                            </div>
+                                            <div className="imgContainer" style={{ width: 'auto', margin: 0 }}>
+                                                <img src="images/tax_step_4_3.png" alt="Tax step 4 - 3" style={{ height: '150px', width: 'auto' }}></img>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li><b>(5)「廠商稅額統整」分頁可察看廠商稅額合計(依月份)。</b>
+                                        <div style={{ marginTop: '5px' }}>
+                                            需要以滑鼠右鍵點擊表格，選擇「重新整理」，即可使表格顯示最新的資料。
+                                        </div>
+                                        <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                                            <div className="imgContainer" style={{ width: 'auto', margin: 0 }}>
+                                                <img src="images/tax_step_5_1.png" alt="Tax step 5 - 1" style={{ height: '150px', width: 'auto' }}></img>
+                                            </div>
+                                            <div className="imgContainer" style={{ width: 'auto', margin: 0 }}>
+                                                <img src="images/tax_step_5_2.png" alt="Tax step 5 - 2" style={{ height: '150px', width: 'auto' }}></img>
+                                            </div>
+                                            <div className="imgContainer" style={{ width: 'auto', margin: 0 }}>
+                                                <img src="images/tax_step_5_3.png" alt="Tax step 5 - 3" style={{ height: '150px', width: 'auto' }}></img>
+                                            </div>
                                         </div>
                                     </li>
                                 </ul>
                             </li>
                             <li>
-                                <b>上傳進項發票資料</b><br></br>左側邊欄選擇檔案，並上傳。
+                                <b>上傳進項發票資料</b>
+                                <div style={{ marginTop: '5px' }}>
+                                    左側邊欄選擇檔案，並上傳。
+                                </div>
                                 <div className="imgContainer" style={{ width: 'auto', margin: 0, marginTop: '10px' }}>
                                     <img src="images/tax_step_3_upload.png" alt="Upload file sidebar" style={{ height: '200px', width: 'auto' }}></img>
                                 </div>
                             </li>
                             <li>
-                                <b>下載進項發票媒體檔</b><br></br>上傳完成後，頁面會顯示檔案內容，可點擊右上角「下載進項發票媒體檔(.txt)」按鈕，下載檔案。
+                                <b>下載進項發票媒體檔</b>
+                                <div style={{ marginTop: '5px' }}>
+                                    上傳完成後，頁面會顯示檔案內容，可點擊右上角「下載進項發票媒體檔(.txt)」按鈕，下載檔案。
+                                </div>
                                 <div className="imgContainer" style={{ width: 'auto', margin: 0, marginTop: '10px' }}>
                                     <img src="images/tax_step_4_download.png" alt="Download file button" style={{ maxWidth: '100%', height: 'auto' }}></img>
                                 </div>
                             </li>
                             <li>
-                                <b>將檔案上傳至報稅系統</b><br></br>下載的媒體檔檔名為自己的統編，將檔案移至離線報稅系統預設路徑(C:/ETAX/BLR/UpLoad/Default/報稅月份)，並利用報稅系統介面的「媒體檔匯入」-&gt;「進銷項資料」功能，選擇該檔案，完成匯入。步驟可參考網站: <a href="https://blog.hungwin.com.tw/electronic-invoice-media-declaration-file/#2-3" target="_blank" rel="noopener noreferrer" style={{ color: 'blue', textDecoration: 'underline' }}>https://blog.hungwin.com.tw/electronic-invoice-media-declaration-file/#2-3</a>
+                                <b>將檔案上傳至報稅系統</b>
+                                <div style={{ marginTop: '5px' }}>
+                                    下載的媒體檔檔名為自己的統編，將檔案移至離線報稅系統預設路徑(C:/ETAX/BLR/UpLoad/Default/報稅月份)，並利用報稅系統介面的「媒體檔匯入」-&gt;「進銷項資料」功能，選擇該檔案，完成匯入。亦可直接將檔案當作「進銷項合併」步驟中的「進項」檔案。<br></br>步驟可參考網站: <a href="https://blog.hungwin.com.tw/electronic-invoice-media-declaration-file/#2-3" target="_blank" rel="noopener noreferrer" style={{ color: 'blue', textDecoration: 'underline' }}>https://blog.hungwin.com.tw/electronic-invoice-media-declaration-file/#2-3</a>
+                                </div>
                                 <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '10px' }}>
                                     <div className="imgContainer" style={{ width: '48%', margin: 0 }}>
                                         <img src="images/tax_step_5_import_menu.png" alt="Import menu" style={{ width: '100%', height: 'auto' }}></img>

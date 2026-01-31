@@ -26,6 +26,12 @@ export default function taxDataTidy(file) {
                 let isMainList = false;
                 let mainListHeader = [];
 
+                const ALLOWED_HEADERS = [
+                    "流水號", "格式代號", "年", "月", "銷售人統編",
+                    "發票字軌", "發票號碼", "銷售金額", "營業稅額",
+                    "課稅別", "扣抵代號"
+                ];
+
                 for (let i = 0; i < rawData.length; i++) {
                     const row = rawData[i];
                     if (!row || row.length === 0) continue;
@@ -46,14 +52,27 @@ export default function taxDataTidy(file) {
                         // Usually the header row
                         if (row.includes("銷售金額總計")) {
                             // It's the header row
-                            summaryTable.title = row.filter(cell => cell && typeof cell === 'string' && (cell.includes("總計") || cell.includes("張數")));
-                            // Assume next row is data
+                            const allowedSummaryHeaders = ["張數總計", "銷售金額總計", "營業稅額總計"];
+
+                            // Map original indices to allowed headers
+                            const summaryIndices = [];
+                            const filteredTitles = [];
+
+                            row.forEach((cell, idx) => {
+                                if (cell && typeof cell === 'string') {
+                                    if (allowedSummaryHeaders.some(h => cell.includes(h))) {
+                                        filteredTitles.push(cell);
+                                        summaryIndices.push(idx);
+                                    }
+                                }
+                            });
+
+                            summaryTable.title = filteredTitles;
+
+                            // Grab data from the next row corresponding to these indices
                             if (rawData[i + 1]) {
-                                // We try to grab values corresponding to these columns, but simpler is to just grab valid numbers from next row
-                                // Let's assume the next row aligns with these titles. 
-                                // Or just grab the next row's non-empty values?
-                                // Let's grab specific indices if we can, or just push row i+1
-                                summaryTable.data = rawData[i + 1].filter(cell => cell !== undefined && cell !== "");
+                                const nextRow = rawData[i + 1];
+                                summaryTable.data = summaryIndices.map(idx => nextRow[idx]);
                                 i++; // Skip next row
                             }
                         }
@@ -69,12 +88,23 @@ export default function taxDataTidy(file) {
                     else if (isMainList) {
                         // Convert row array to object based on mainListHeader
                         const rowObj = {};
+                        let hasValidData = false;
+
                         mainListHeader.forEach((header, index) => {
-                            rowObj[header] = row[index];
+                            // Only include allowed headers
+                            if (header && ALLOWED_HEADERS.some(allowed => header.toString().includes(allowed))) {
+                                rowObj[header] = row[index];
+                                // Check if this specific allowed column has data (optional, but good for filtering)
+                                if (row[index] !== undefined && row[index] !== "" && row[index] !== null) {
+                                    hasValidData = true;
+                                }
+                            }
                         });
-                        // Filter out empty rows (where all values are empty)
-                        const hasContent = Object.values(rowObj).some(val => val !== undefined && val !== "" && val !== null);
-                        if (hasContent) {
+
+                        // Use the strict whitelist to determine if we add the row.
+                        // However, we should probably keep the original "hasContent" logic but scoped to allowed columns?
+                        // If all allowed columns are empty, we probably shouldn't add it.
+                        if (hasValidData) {
                             mainList.push(rowObj);
                         }
                     }
