@@ -60,11 +60,10 @@ function TaxExportBtn({ content }) {
             // 7. Seller ID (8) - "銷售人統編(8)"
             const sellerId = padText(row["銷售人統編(8)"], 8);
 
-            // 8. Track (2) - "發票字軌(2-4)" -> screenshot shows 2.
-            const track = padText(row["發票字軌(2-4)"], 2);
-
-            // 9. Number (8) - "發票號碼(6-8)" -> screenshot shows 8 (pad 0)
-            const number = pad(row["發票號碼(6-8)"], 8, "0");
+            // 8 & 9. Track (2-4) and Number (6-8) combined to exactly 10 characters
+            const rawTrack = String(row["發票字軌(2-4)"] || "").trim();
+            const rawNumber = String(row["發票號碼(6-8)"] || "").trim();
+            const combinedInvoice = padText(rawTrack + rawNumber, 10);
 
             // 10. Sales (12) - "銷售金額(12)"
             const sales = pad(row["銷售金額(12)"], 12, "0");
@@ -79,7 +78,7 @@ function TaxExportBtn({ content }) {
             const deduction = pad(row["扣抵代號(1)"], 1, "0"); // Default 1 or 0? user data shows 1
 
             // Concatenate strictly and append 8 spaces
-            return `${formatCode}${globalTaxId}${serial}${year}${month}${globalBuyerId}${sellerId}${track}${number}${sales}${taxType}${taxAmount}${deduction}        `;
+            return `${formatCode}${globalTaxId}${serial}${year}${month}${globalBuyerId}${sellerId}${combinedInvoice}${sales}${taxType}${taxAmount}${deduction}        `;
         });
 
         const textContent = rows.join("\r\n");
