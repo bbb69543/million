@@ -1,6 +1,7 @@
 import React from "react";
-import { Box, Fab } from "@mui/material";
+import { Box, Fab, Typography } from "@mui/material";
 import UploadButton from "./UploadButton";
+import AboutSystemBtn from "./AboutSystemBtn";
 
 function SideBarArea(props) {
   // the files we need
@@ -23,12 +24,14 @@ function SideBarArea(props) {
       }}
       className="animated-background"
     >
-      <h1 style={{ margin: '10px 0' }}>蜜鄰對帳小工具</h1>
+      <Typography variant="h5" component="h1" sx={{ my: 1.25, fontWeight: 'bold' }}>
+        蜜鄰對帳小工具
+      </Typography>
       <Box sx={{ width: "80%", marginBottom: 1, mx: "auto" }}>
         <img
           src="/images/homeImg.jpg"
           alt="Sidebar Illustration"
-          style={{ width: "100%" }}
+          className="sidebar-img"
         />
       </Box>
       {fileList.map((item, index) => {
@@ -68,6 +71,7 @@ function SideBarArea(props) {
       >
         回首頁
       </Fab>
+      <AboutSystemBtn sx={{ mt: 1.5, mb: 0.5 }} />
     </Box>
   );
 }

@@ -12,24 +12,24 @@ function TeachText() {
       </ol>
       <h2>核對結果注意事項:</h2>
       <ul>
-        <li>頁面顯示結果<br></br>有差異量時，數字會標<b style={{ color: "red", }}>紅色</b>。
+        <li>頁面顯示結果<br />有差異量時，數字會標<b className="text-diff-error">紅色</b>。
           <div className="imgContainer">
-            <img src="images/result1.png" alt="the normal result"></img>
+            <img src="images/result1.png" alt="the normal result" />
           </div>
         </li>
-        <li>遇到<b>相同營業所產品編號，但不同國際條碼</b>時，底色會變<b style={{ backgroundColor: "#CCEEFF", }}>淺藍色</b>，兩列進銷存庫存量相同且數值即為進銷存庫存(並非相加的值)。
+        <li>遇到<b>相同營業所產品編號，但不同國際條碼</b>時，底色會變<b className="highlight-blue">淺藍色</b>，兩列進銷存庫存量相同且數值即為進銷存庫存(並非相加的值)。
           <div className="imgContainer">
-            <img src="images/result2.png" alt="Double barcode condition"></img>
+            <img src="images/result2.png" alt="Double barcode condition" />
           </div>
         </li>
-        <li>遇到<b>編號類似品項</b>時(如:1組3罐、1盒6入)，底色會變<b style={{ backgroundColor: "#CCEEFF", }}>淺藍色</b>，零散或成組的庫存即為各自的的庫存。
+        <li>遇到<b>編號類似品項</b>時(如:1組3罐、1盒6入)，底色會變<b className="highlight-blue">淺藍色</b>，零散或成組的庫存即為各自的的庫存。
           <div className="imgContainer">
-            <img src="images/result3.png" alt="Single and group condition"></img>
+            <img src="images/result3.png" alt="Single and group condition" />
           </div>
         </li>
         <li>遇到<b>4x1商品轉換檔內沒有資料的品項</b>時(如:990303水煮鯖魚3入、M90101應稅外貨品)，資料會在表格<b>底部</b>。
           <div className="imgContainer">
-            <img src="images/result4.png" alt="Single and group condition"></img>
+            <img src="images/result4.png" alt="Single and group condition" />
           </div>
         </li>
       </ul>

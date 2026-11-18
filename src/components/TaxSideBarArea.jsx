@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Fab, Typography } from "@mui/material";
 import UploadButton from "./UploadButton";
+import AboutSystemBtn from "./AboutSystemBtn";
 
 function TaxSideBarArea(props) {
     // the files we need
@@ -28,7 +29,7 @@ function TaxSideBarArea(props) {
                 <img
                     src="/images/homeImg.jpg"
                     alt="Sidebar Illustration"
-                    style={{ width: "100%" }}
+                    className="sidebar-img"
                 />
             </Box>
             {fileList.map((item, index) => {
@@ -68,6 +69,7 @@ function TaxSideBarArea(props) {
             >
                 回首頁
             </Fab>
+            <AboutSystemBtn sx={{ mt: 2 }} />
         </Box>
     );
 }

@@ -28,11 +28,16 @@ export default function analyze(pos, tai, rule) {
     return newItem;
   });
 
+  // 建立 Set 以 O(1) 時間複雜度快速查找是否已在 rule 中
+  const rulePosSet = new Set(rule.map((item) => item["店鋪商品條碼"]));
+  const ruleTaiSet = new Set(rule.map((item) => item["營業所產品編號"]));
+
   // 先處理 pos 和 tai 中沒對到 rule 的資料
   Object.keys(pos).forEach((posNum) => {
-    if (!rule.some((item) => item["店鋪商品條碼"] === posNum)) {
+    if (!rulePosSet.has(posNum)) {
       const newItem = {
         店鋪商品條碼: posNum,
+        商品名稱: pos[posNum]["商品名稱"],
         pos庫存量: pos[posNum]["庫存量"],
         pos銷售量: pos[posNum]["本月銷售"],
         "pos庫存+銷售": pos[posNum]["合計"],
@@ -44,9 +49,10 @@ export default function analyze(pos, tai, rule) {
   });
 
   Object.keys(tai).forEach((taiNum) => {
-    if (!rule.some((item) => item["營業所產品編號"] == taiNum)) {
+    if (!ruleTaiSet.has(taiNum)) {
       const newItem = {
         營業所產品編號: taiNum,
+        商品名稱: tai[taiNum]["商品名稱"],
         pos庫存量: 0, // 沒有 pos 資料
         pos銷售量: 0,
         "pos庫存+銷售": 0,
@@ -60,9 +66,9 @@ export default function analyze(pos, tai, rule) {
   const result = combineData.filter((item) => {
     //去除庫存皆為0的資料
     return (
-      item["pos庫存量"] |
-      item["pos銷售量"] |
-      item["pos庫存+銷售"] |
+      item["pos庫存量"] ||
+      item["pos銷售量"] ||
+      item["pos庫存+銷售"] ||
       item["進銷存庫存量"]
     );
   });

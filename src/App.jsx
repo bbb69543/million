@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import AnalysisPage from "./pages/AnalysisPage";
 // import PlaceholderPage from "./pages/PlaceholderPage"; // No longer needed
 import TaxConversionPage from "./pages/TaxConversionPage";
+import "./App.css";
 
 function App() {
   return (

@@ -1,46 +1,55 @@
 import * as XLSX from "xlsx";
+import { COLUMN_KEYWORDS } from "../config/columnKeywords";
+import { parseSheetByKeywords } from "../utils/excelHeaderFinder";
 
 export default function taiTidy(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = function (e) {
-      const data = e.target.result;
-      // 讀取 Excel 檔案
-      const workbook = XLSX.read(data, { type: "array" });
+      try {
+        const data = e.target.result;
+        // raw: false 確保像 "01230500" 或 "0706" 這類以 0 開頭的商品代碼不會在 CSV/Excel 被轉成數字而吃掉前導 0
+        const workbook = XLSX.read(data, { type: "array", raw: false });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
 
-      // 假設讀取第一個工作表
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheetName];
+        // 自動在前 20 列 x 20 欄尋找表頭與對應欄位名稱
+        const { matchedColumns, jsonData } = parseSheetByKeywords(
+          worksheet,
+          COLUMN_KEYWORDS.tai,
+          "進銷存系統庫存檔"
+        );
 
-      // 將工作表轉換成 JSON 格式
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, {
-        header: 0, // 設定第1行為表頭 (0-indexed)
-        range: 0, // 設定從第1行開始讀取
-      });
+        const rearrangedData = jsonData.reduce((acc, item) => {
+          const rawId = item[matchedColumns.productId];
+          if (rawId === undefined || rawId === null) return acc;
 
-      //整理所需資料
-      const rearrangedData = jsonData.reduce((acc, item) => {
-        const productId = item["商品編號"]; // 取商品編號作為物件的 key
-        const inventory = item["本日結存量"]; // 取庫存量
- 
-        // 根據商品編號將資料整理進新物件
-        acc[productId] = {
-          庫存量: inventory,
-        };
+          const productId = String(rawId).trim();
+          if (!productId) return acc;
 
-        return acc;
-      }, {});
+          // 移除千分位逗號後轉為數字
+          const rawInv = String(item[matchedColumns.inventory] ?? "0").replace(/,/g, "");
+          const inventory = Number(rawInv) || 0;
+          const productName = item[matchedColumns.productName] || "";
 
-      resolve(rearrangedData); // 使用 resolve 回傳資料
+          acc[productId] = {
+            庫存量: inventory,
+            商品名稱: productName,
+          };
+
+          return acc;
+        }, {});
+
+        resolve(rearrangedData);
+      } catch (error) {
+        reject(error);
+      }
     };
 
-    // 如果讀取檔案發生錯誤，回傳錯誤訊息
     reader.onerror = (error) => {
-      reject(error); 
+      reject(error);
     };
 
     reader.readAsArrayBuffer(file);
-  })
+  });
 }
-
-

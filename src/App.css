@@ -1,5 +1,40 @@
+/* =========================================
+   1. 全域字體與基礎設定 (Global & Typography)
+   ========================================= */
+body,
+p,
+button {
+  font-family: "Noto Sans TC", sans-serif;
+}
 
-/* my css */
+body {
+  margin: 0;
+}
+
+h1 {
+  font-family: "Noto Sans TC", sans-serif;
+  font-size: 1.75em;
+  margin: auto 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.link-blue {
+  color: #1565c0;
+  text-decoration: underline;
+}
+
+.underline-text {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* =========================================
+   2. 側邊欄背景動畫 (Sidebar Background)
+   ========================================= */
 .animated-background {
   background: linear-gradient(-45deg, #d4f1c5, #a5dff0, #f0e1d6, #d4f1c5);
   background-size: 400% 400%;
@@ -18,27 +53,29 @@
   }
 }
 
-h1 {
-  font-family: Noto Sans TC, serif;
-  font-size: 1.75em;
-  margin: auto 0 auto 0;
+.sidebar-img {
+  width: 100%;
+  display: block;
 }
 
-body {
-  margin: 0;
-  font-family: Noto Sans TC, serif;
-}
-
-p {
-  font-family: Noto Sans TC, serif;
-}
-
-button {
-  font-family: Noto Sans TC, serif;
+/* =========================================
+   3. 表格樣式 (Table Styles)
+   ========================================= */
+.table-scroll-wrapper {
+  height: 90vh;
+  overflow-y: auto;
+  border: 1px solid #ddd;
 }
 
 #table {
   border-collapse: collapse;
+  width: 100%;
+  text-align: center;
+}
+
+#table th,
+#table td {
+  border: 1px solid #333;
 }
 
 thead {
@@ -46,13 +83,64 @@ thead {
   top: 0;
   background: white;
   z-index: 1000;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1); /* 模擬下方邊框 */
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+}
+
+.row-highlight-blue {
+  background-color: #cceeff;
+}
+
+.row-highlight-yellow {
+  background-color: #fff9c4;
+}
+
+.text-diff-error {
+  color: red;
+}
+
+.text-diff-normal {
+  color: black;
+}
+
+.highlight-blue {
+  background-color: #cceeff;
+}
+
+/* =========================================
+   4. 教學與說明區塊 (Tutorial & Scroll Area)
+   ========================================= */
+.scroll-container {
+  position: relative;
+  height: 95vh;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.step-desc {
+  margin-top: 5px;
+}
+
+.step-note {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.img-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.img-row-wrap {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
 }
 
 .imgContainer {
   width: 600px;
   margin: 5px auto;
-  
 }
 
 .imgContainer > img {
@@ -62,44 +150,73 @@ thead {
   border: 1px solid #4f4f4f;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
+/* 教學圖片尺寸變體 */
+.imgContainer.auto {
+  width: auto;
+  margin: 0;
 }
 
-/* 讓 div 可以滾動 */
-.scroll-container {
-  position: relative; /* 讓按鈕的 absolute 定位生效 */
-  height: 95vh;
-  overflow-y: auto;
-  padding: 20px;
+.imgContainer.auto-mt {
+  width: auto;
+  margin: 10px 0 0 0;
 }
 
-/* 回到頂部按鈕 */
+.imgContainer.crop-291 {
+  width: 291px;
+  margin: 0;
+  overflow: hidden;
+}
+
+.imgContainer.half {
+  width: 48%;
+  margin: 0;
+}
+
+.img-h150 {
+  height: 150px;
+  width: auto;
+}
+
+.img-h200 {
+  height: 200px;
+  width: auto;
+}
+
+.img-responsive {
+  max-width: 100%;
+  height: auto;
+}
+
+.img-full {
+  width: 100%;
+  height: auto;
+}
+
+/* =========================================
+   5. 回到頂部按鈕 (Scroll To Top Button)
+   ========================================= */
 .scroll-to-top-btn {
   position: sticky;
   bottom: 10px;
   left: 90vw;
   padding: 10px 15px;
-  background-color: #CCEEFF;
+  background-color: #cceeff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s, background-color 0.2s;
 }
 
-/* 當按鈕顯示時 */
 .scroll-to-top-btn.show {
   opacity: 1;
 }
 
-/* 當按鈕隱藏時 */
 .scroll-to-top-btn.hide {
   opacity: 0;
-  pointer-events: none; /* 防止點擊隱藏的按鈕 */
+  pointer-events: none;
 }
 
 .scroll-to-top-btn:hover {
-  background-color: #1565C0;
+  background-color: #1565c0;
 }

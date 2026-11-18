@@ -1,14 +1,14 @@
 import React from "react";
-import { Button, Box } from "@mui/material";
+import { Button, Box, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 function UploadButton(props) {
   return (
     <Box sx={{ marginBottom: 0.5, width: '100%' }}>
-      <p variant="body1" style={{ margin: '0 0 4px 0' }}>
+      <Typography variant="body1" sx={{ mb: 0.5 }}>
         {props.label}
-      </p>
+      </Typography>
       <Button
         component="label"
         role={undefined}
@@ -22,7 +22,7 @@ function UploadButton(props) {
           onChange={(e) => {
             props.handleUpload(e, props.index);
           }}
-          accept=".xls,.xlsx,.ods,.xlt"
+          accept=".xls,.xlsx,.ods,.xlt,.csv"
         // multiple
         />
         {props.files[props.index] ? props.files[props.index].name : "選擇檔案"}

@@ -1,33 +1,48 @@
 import * as XLSX from "xlsx";
+import { COLUMN_KEYWORDS } from "../config/columnKeywords";
+import { parseSheetByKeywords } from "../utils/excelHeaderFinder";
 
-export default function taiTidy(file) {
+export default function ruleTidy(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = function (e) {
-      const data = e.target.result;
-      // 讀取 Excel 檔案
-      const workbook = XLSX.read(data, { type: "array" });
+      try {
+        const data = e.target.result;
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
 
-      // 假設讀取第一個工作表
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheetName];
+        // 自動在前 20 列 x 20 欄尋找表頭與對應欄位名稱
+        const { matchedColumns, jsonData } = parseSheetByKeywords(
+          worksheet,
+          COLUMN_KEYWORDS.rule,
+          "4X1 店鋪商品數量轉換維護檔"
+        );
 
-      // 將工作表轉換成 JSON 格式
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, {
-        header: 5, // 設定第6行為表頭 (0-indexed)
-        range: 5, // 設定從第6行開始讀取
-      });
+        // 過濾出「序」為有效整數的資料列，並統一標準化欄位名稱供 analyze.js 與 TableData.jsx 使用
+        const rearrangedData = jsonData
+          .filter((item) => {
+            const serialVal = Number(item[matchedColumns.serial]);
+            return (
+              item[matchedColumns.serial] !== undefined &&
+              item[matchedColumns.serial] !== "" &&
+              Number.isInteger(serialVal)
+            );
+          })
+          .map((item) => ({
+            序: Number(item[matchedColumns.serial]),
+            營業所產品編號: String(item[matchedColumns.taiId] ?? "").trim(),
+            店鋪商品條碼: String(item[matchedColumns.posId] ?? "").trim(),
+            商品名稱: item[matchedColumns.productName] ?? "",
+            轉換數量: Number(item[matchedColumns.ratio]) || 0,
+          }));
 
-      //整理所需資料
-      const rearrangedData = jsonData.filter((item) => {
-        // 檢查 item["序"] 是否是有效的數字
-        return Number.isInteger(item["序"]);
-      });
-
-      resolve(rearrangedData); // 使用 resolve 回傳資料
+        resolve(rearrangedData);
+      } catch (error) {
+        reject(error);
+      }
     };
 
-    // 如果讀取檔案發生錯誤，回傳錯誤訊息
     reader.onerror = (error) => {
       reject(error);
     };

@@ -1,14 +1,150 @@
-The website only for Million convenience store to verify accounting records.
+# Million 工具包 (蜜鄰便利超市輔助小工具)
 
-# React + Vite
+專為台糖蜜鄰便利超市夥伴打造的網頁工具包，旨在簡化門市日常對帳與報稅資料轉檔作業，全數運算皆於瀏覽器本地端完成，快速且保障資料安全。
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
 
-Currently, two official plugins are available:
+## 📌 核心功能
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 1. POS-400 對帳小工具 (`/analysis`)
+協助門市人員快速核對「POS 系統」與「公司 400 進銷存系統」的庫存差異：
+- **上傳檔案**：
+  1. `POS 系統庫存 (.xls)`
+  2. `進銷存系統庫存 (.xlt / .ods / .csv)`
+  3. `4X1_店鋪商品數量轉換維護檔 (.xls)`
+- **自動換算與核對**：
+  - 依據 4X1 轉換檔的倍率，自動將進銷存庫存換算為門市銷售單位並計算差異量：
+    $$\text{差異量(400-pos)} = (\text{進銷存庫存量} \times \text{轉換數量}) - (\text{POS 庫存量} + \text{POS 本月銷售})$$
+- **視覺化防呆標記**：
+  - 🔴 **紅色數字**：代表 `差異量(400-pos)` 不為 0，需盤點確認。
+  - 🔵 **淺藍色底（`#CCEEFF`）**：代表相同營業所產品編號對應多個國際條碼，或編號相似的子母品項（如單罐與成組），提醒人工檢視。
+  - 🟡 **淺黃色底（`#FFF9C4`）**：固定排列於表格最底部，代表「4X1 轉換檔中未建檔」但於 POS 或進銷存有庫存/銷售紀錄的孤兒品項（如外貨或漏建檔商品）。
+- **報表匯出**：支援一鍵下載核對結果為 `pos-400核對表.xlsx`。
 
-## Expanding the ESLint configuration
+### 2. 報稅進項發票轉檔 (`/tax`)
+協助門市將填寫好的進項發票試算表轉換為國稅局離線報稅系統（BLR）標準媒體檔：
+- 提供標準填寫模板下載（`/public/報稅進項發票(模板).ods`）。
+- 上傳後自動檢核「營業稅額」是否為「銷售金額」之 5%（四捨五入），異常項目自動以**紅底**警示。
+- 一鍵匯出符合財政部電子發票媒體申報格式（固定長度 81 字元）之 `.txt` 媒體檔（以買受人統編命名）。
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🛠️ 維護指南：如何修改報表表頭關鍵字（重要）
+
+當未來公司 POS 系統或 400 進銷存系統報表改版，導致**表頭列位置變動**或**欄位名稱更改**時，**無須修改程式邏輯**，只需編輯獨立設定檔即可：
+
+### 📍 修改位置
+請開啟 [`src/config/columnKeywords.js`](./src/config/columnKeywords.js)
+
+```javascript
+export const COLUMN_KEYWORDS = {
+  // 1. POS 系統庫存 (.xls)
+  pos: {
+    productId: ["商品編號", "店鋪商品條碼", "店舖商品條碼", "商品條碼"],
+    productName: ["商品名稱", "品名"],
+    inventory: ["庫存量", "目前庫存", "結存量"],
+    sales: ["本月銷售", "銷售量", "銷售數量"],
+  },
+
+  // 2. 進銷存系統庫存 (.xlt / .ods / .csv)
+  tai: {
+    productId: ["商品編號", "商品代碼", "營業所產品編號", "產品編號"],
+    productName: ["商品名稱", "品名"],
+    inventory: ["本日結存量", "庫存量", "結存量"],
+  },
+
+  // 3. 4X1 店鋪商品數量轉換維護檔 (.xls)
+  rule: {
+    serial: ["序", "序號", "項次"],
+    taiId: ["營業所產品編號", "商品代碼", "商品編號"],
+    posId: ["店鋪商品條碼", "店舖商品條碼", "國際條碼", "商品條碼"],
+    productName: ["商品名稱", "品名"],
+    ratio: ["轉換數量", "轉換率", "倍數"],
+  },
+};
+```
+
+### 🔍 系統自動搜尋規則說明（[`src/utils/excelHeaderFinder.js`](./src/utils/excelHeaderFinder.js)）
+1. **自動掃描前 20 列 × 20 欄**：
+   無論報表上方新增或刪減了多少列標題、印表日期，系統都會自動在前 20 列中尋找包含主鍵（如 `productId` 或 `serial`）的那一列作為表頭列。
+2. **完全相符比對（忽略前後空白）**：
+   儲存格文字去除前後空白後，必須與設定檔中的關鍵字完全一致（例如 `"庫存量"` 不會誤抓 `"前日庫存"`）。
+3. **陣列順序 = 優先權順序（越靠左優先權越高）**：
+   若同一份報表的表頭同時出現多個候選名稱，系統會優先抓取排在陣列**最左邊**的關鍵字。
+   - **維護方式**：若未來報表欄位改名（例如「本日結存量」改為「期末庫存」），只需將 `"期末庫存"` 加到對應陣列的最前面即可。
+4. **同名合併儲存格處理**：
+   若同一列出現兩個完全同名的欄位（例如 POS 報表將「本月銷售」合併儲存格，左欄為數量、右欄為金額），系統會自動鎖定**最左邊第 1 個出現的欄位**。
+
+---
+
+## 📂 專案目錄結構
+
+```text
+million/
+├── public/
+│   ├── images/                     # 教學說明圖片與側邊欄插圖
+│   └── 報稅進項發票(模板).ods        # 報稅轉檔空白模板
+├── src/
+│   ├── assets/
+│   │   └── deer.jpg                # 首頁背景圖片
+│   ├── config/
+│   │   └── columnKeywords.js       # ★ 報表表頭欄位關鍵字設定檔（維護改這裡）
+│   ├── utils/
+│   │   └── excelHeaderFinder.js    # 前 20x20 自動尋找表頭與欄位工具函式
+│   ├── components/
+│   │   ├── AboutSystemBtn.jsx      # 「關於本系統」按鈕與彈出視窗
+│   │   ├── SideBarArea.jsx         # 對帳小工具左側邊欄
+│   │   ├── TaxSideBarArea.jsx      # 報稅轉檔左側邊欄
+│   │   ├── ContentArea.jsx         # 右側主內容與教學容器
+│   │   ├── TeachText.jsx           # 對帳小工具圖文教學說明
+│   │   ├── posTidy.js              # POS 系統庫存檔解析
+│   │   ├── taiTidy.js              # 進銷存系統庫存檔解析
+│   │   ├── ruleTidy.js             # 4X1 轉換維護檔解析
+│   │   ├── analyze.js              # POS 與進銷存交叉比對與差異計算核心邏輯
+│   │   ├── TableData.jsx           # 對帳結果表格顯示
+│   │   ├── TableDataBtn.jsx        # 對帳結果匯出 Excel 按鈕
+│   │   ├── taxDataTidy.js          # 報稅進項發票檔案解析
+│   │   ├── TaxDataDisplay.jsx      # 報稅資料預覽與稅額 5% 檢核顯示
+│   │   ├── TaxExportBtn.jsx        # 報稅媒體檔 (.txt) 匯出按鈕
+│   │   ├── GenericTable.jsx        # 通用 MUI 表格元件
+│   │   ├── UploadButton.jsx        # 檔案上傳按鈕元件
+│   │   └── ScrollToTopBtn.jsx      # 回到頂部浮動按鈕
+│   ├── pages/
+│   │   ├── HomePage.jsx            # 首頁 (path="/")
+│   │   ├── AnalysisPage.jsx        # POS-400 對帳小工具頁面 (path="/analysis")
+│   │   └── TaxConversionPage.jsx   # 報稅進項發票轉檔頁面 (path="/tax")
+│   ├── App.css                     # 全站共用樣式（字體、動畫、表格、教學圖片排版）
+│   ├── App.jsx                     # 路由設定 (React Router)
+│   └── main.jsx                    # 應用程式入口
+└── package.json
+```
+
+---
+
+## 🚀 本地開發與部署
+
+### 環境需求
+- Node.js (建議 v18 以上)
+
+### 常用指令
+
+```bash
+# 1. 安裝套件
+npm install
+
+# 2. 啟動本地開發伺服器 (預設 http://localhost:5173)
+npm run dev
+
+# 3. 打包正式環境檔案 (輸出至 dist/ 資料夾)
+npm run build
+
+# 4. 預覽打包結果
+npm run preview
+```
+
+---
+
+## 👨‍💻 關於本系統與維護紀錄
+
+- **2026/03**：本系統由 **姚禹安** 獨立開發。
+- **2026/12**：交接由 **台糖台中所單位同仁** 維護。

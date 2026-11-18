@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Button, Typography, Container, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import deerImage from '../assets/deer.jpg';
+import AboutSystemBtn from '../components/AboutSystemBtn';
 
 const HomePage = () => {
     const navigate = useNavigate();
@@ -67,6 +68,8 @@ const HomePage = () => {
                         報稅進項發票轉檔
                     </Button>
                 </Box>
+
+                <AboutSystemBtn />
             </Paper>
         </Box>
     );

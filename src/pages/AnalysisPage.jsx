@@ -7,7 +7,6 @@ import posTidy from "../components/posTidy";
 import taiTidy from "../components/taiTidy";
 import ruleTidy from "../components/ruleTidy";
 import analyze from "../components/analyze";
-import '../App.css'
 
 function AnalysisPage() {
     const navigate = useNavigate();
@@ -24,20 +23,22 @@ function AnalysisPage() {
         e.preventDefault();
         if (files.includes(null)) {
             alert("請上傳3個檔案!");
+            return;
         }
         try {
-            const posFile = files[0];
-            const taiFile = files[1];
-            const ruleFile = files[2];
+            const [posFile, taiFile, ruleFile] = files;
 
-            const posData = await posTidy(posFile);
-            const taiData = await taiTidy(taiFile);
-            const ruleTable = await ruleTidy(ruleFile);
+            const [posData, taiData, ruleTable] = await Promise.all([
+                posTidy(posFile),
+                taiTidy(taiFile),
+                ruleTidy(ruleFile),
+            ]);
 
-            const result = await analyze(posData, taiData, ruleTable)
+            const result = analyze(posData, taiData, ruleTable);
             setContent(result);
         } catch (error) {
-            console.error("檔案解析解析錯誤", error);
+            console.error("檔案解析錯誤", error);
+            alert(error.message || "檔案解析錯誤，請確認上傳的檔案格式是否正確！");
         }
     }
 
